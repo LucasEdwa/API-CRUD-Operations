@@ -1,0 +1,34 @@
+// This is your Prisma schema file,
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// This is your Prisma schema file,
+// With relationship between Book and Review
+// we  are able to query the reviews of a book
+model Book {
+  id          Int      @id @default(autoincrement())
+  title       String
+  author      String
+  description String
+  published   DateTime
+  reviews     Review[]
+}
+
+// here we define the relationship between Book and Review
+//using the @relation attribute and the fields and references arguments
+model Review {
+  id        Int      @id @default(autoincrement())
+  book      Book     @relation(fields: [bookId], references: [id])
+  name      String
+  text      String
+  rating    Int
+  bookId    Int
+  published DateTime @default(now())
+}
